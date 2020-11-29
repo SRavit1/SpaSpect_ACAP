@@ -117,19 +117,9 @@ bool readFromCalib(string fileName, Point2f source_calib[], Point2f dest_calib[]
 	assert (nums.size() == LINE_LENGTH);
 
 	for (int i = 0; i < LINE_LENGTH/NUM_CALIB_COLS; i++) {
-		Point2f source_calib_curr = *source_calib;
+		Point2f &source_calib_curr = *source_calib;
 		source_calib_curr.x = nums[2*i];
 		source_calib_curr.y = nums[2*i+1];
-		source_calib++;
-	}
-
-	for (int i = 0; i < LINE_LENGTH/NUM_CALIB_COLS; i++) {
-		Point2f source_calib_curr = *source_calib;
-
-		cout << "STORING VALUES IN SOURCE: " << source_calib_curr.x 
-		<< " " << source_calib_curr.y << endl;
-
-
 		source_calib++;
 	}
 
@@ -141,7 +131,7 @@ bool readFromCalib(string fileName, Point2f source_calib[], Point2f dest_calib[]
 	assert (nums.size() == LINE_LENGTH);
 
 	for (int i = 0; i < LINE_LENGTH/NUM_CALIB_COLS; i++) {
-		Point2f dest_calib_curr = *dest_calib;
+		Point2f &dest_calib_curr = *dest_calib;
 		dest_calib_curr.x = nums[2*i];
 		dest_calib_curr.y = nums[2*i+1];
 
@@ -179,6 +169,11 @@ void obtainPerspectiveTransform(vector<vector<int>> source_calib,
 	getPerspectiveTransform(s_c, d_c);
 }
 
+void obtainPerspectiveTransform(Point2f* source_calib, 
+	Point2f* dest_calib, Mat& transformation_mat) {
+	transformation_mat = getPerspectiveTransform(source_calib, dest_calib);
+}
+
 /*
 Description
 	Applies specified transformation to source and stores it in dest
@@ -192,29 +187,16 @@ void applyPerspectiveTransform(const Mat& transformation_mat, const Mat& source,
 }
 
 int main() {
-	//vector<vector<int>> source_calib;
-	//vector<vector<int>> dest_calib;
 
-	Point2f source_calib_new[NUM_CALIB_ROWS];
-	Point2f dest_calib_new[NUM_CALIB_ROWS];
+	Point2f source_calib[NUM_CALIB_ROWS];
+	Point2f dest_calib[NUM_CALIB_ROWS];
 
-	//readFromCalib("./sampleCalib.config", source_calib, dest_calib);
-	readFromCalib("./sampleCalib.config", source_calib_new, dest_calib_new);
-	
-	for (int i = 0; i < NUM_CALIB_ROWS; i++) {
-		Point2f curr = source_calib_new[i];
-		cout << curr.x << " " << curr.y << endl;
-	}
+	readFromCalib("./sampleCalib.config", source_calib, dest_calib);
 
-	cout << endl;
+	Mat transformation_mat(2, 2 ,CV_32FC1);
+	obtainPerspectiveTransform(source_calib, dest_calib, transformation_mat);
 
-	for (int i = 0; i < NUM_CALIB_ROWS; i++) {
-		Point2f curr = dest_calib_new[i];
-		cout << curr.x << " " << curr.y << endl;
-	}
-
-	//Mat transformation_mat(2, 2 ,CV_32FC1);
-	//obtainPerspectiveTransform(source_calib, dest_calib, transformation_mat);
+	cout << "Traformation Mat!!!!!!!: " << transformation_mat << endl;
 
 	/*
 	Mat image;
