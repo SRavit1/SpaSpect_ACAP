@@ -10,5 +10,8 @@ debug: executable
 executable:
 	$(CC) $(CCFLAGS) main.cpp $(LIBS)
 
+test:
+	$(CC) $(CCFLAGS) test.cpp $(LIBS)
+
 clean:
 	rm a.out
