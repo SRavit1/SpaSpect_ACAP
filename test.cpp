@@ -25,7 +25,7 @@ int testReadVideo(int verbose = 0) {
 	int counter = 0;
 
 	for (;;) {
-		VideoCapture cap("/home/ravit/Videos/RealtimeAction.mp4");
+		VideoCapture cap("/home/santript/ImportantProjects/Files/TimesSquare2.mp4");
 		cap.read(image);
 
 		if(!image.data) {

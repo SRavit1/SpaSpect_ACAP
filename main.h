@@ -134,3 +134,17 @@ Params
 void applyPerspectiveTransform(const Mat& transformation_mat, const Mat& source, Mat& dest) {
 	dest = transformation_mat.dot(source);
 }
+
+
+void matrixToVector(const Mat& mat, vector<uint8_t>& finalVector){
+	vector<uint8_t>* array = new vector<uint8_t>(mat.rows*mat.cols*mat.channels());
+	if (mat.isContinuous())
+   		array.insert(array.end(), mat.data, mat.data+(mat.rows*mat.cols*mat.channels()));
+   	else
+   		for (int i=0; i<mat.rows; ++i){
+   		    uint8_t* row = mat.ptr<uint8_t>(i);
+   		    array.insert(array.end(), row, row+(mat.cols*mat.channels()));
+   		}
+
+   	finalVector = *array;
+}
