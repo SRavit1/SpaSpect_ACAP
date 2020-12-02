@@ -10,6 +10,7 @@ debug: executable
 executable:
 	$(CC) $(CCFLAGS) main.cpp $(LIBS)
 
+test: CCFLAGS += -DDEBUG -g
 test:
 	$(CC) $(CCFLAGS) test.cpp $(LIBS)
 

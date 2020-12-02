@@ -136,14 +136,23 @@ void applyPerspectiveTransform(const Mat& transformation_mat, const Mat& source,
 }
 
 
+/*
+Description
+	Converts Mat datatype to vector of containing series of uint8_t values (needed for CPPflow)
+Params
+	const Mat& mat - the matrix containing the values to be extracted
+	vector<uint8_t>& finalVector - vector into which the values are to be stored
+*/
 void matrixToVector(const Mat& mat, vector<uint8_t>& finalVector){
 	vector<uint8_t>* array = new vector<uint8_t>(mat.rows*mat.cols*mat.channels());
+
+	cout << endl << "DEBUG: Printing out mat from within matrixToVector function " << mat << endl << endl;
 	if (mat.isContinuous())
-   		array.insert(array.end(), mat.data, mat.data+(mat.rows*mat.cols*mat.channels()));
+   		array->insert(array->end(), mat.data, mat.data+(mat.rows*mat.cols*mat.channels()));
    	else
    		for (int i=0; i<mat.rows; ++i){
-   		    uint8_t* row = mat.ptr<uint8_t>(i);
-   		    array.insert(array.end(), row, row+(mat.cols*mat.channels()));
+   		    const uchar* row = mat.ptr<uchar>(i);
+   		    array->insert(array->end(), row, row+(mat.cols*mat.channels()));
    		}
 
    	finalVector = *array;
