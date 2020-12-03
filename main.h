@@ -139,22 +139,27 @@ void applyPerspectiveTransform(const Mat& transformation_mat, const Mat& source,
 /*
 Description
 	Converts Mat datatype to vector of containing series of uint8_t values (needed for CPPflow)
+	Note: finalVector must be of the SAME type as of values in mat
 Params
 	const Mat& mat - the matrix containing the values to be extracted
 	vector<uint8_t>& finalVector - vector into which the values are to be stored
 */
-void matrixToVector(const Mat& mat, vector<uint8_t>& finalVector){
-	vector<uint8_t>* array = new vector<uint8_t>(mat.rows*mat.cols*mat.channels());
+template <class d_type>
+void matrixToVector(const Mat& mat, vector<d_type>& finalVector){
+	//mat.data returns a pointer of type uchar
+	//BUT this doesn't mean that values in mat are of datatype uchar 
+	uint8_t* raw_data = mat.data;
 
-	cout << endl << "DEBUG: Printing out mat from within matrixToVector function " << mat << endl << endl;
+	//We must cast the raw_data pointer to the datatype of values in mat
+	//TODO: Consider making this function a template function so that instead
+	//	of restricting ourselves to ints, we can work with any datatype
+	d_type* data_ptr = reinterpret_cast<d_type*>(raw_data);
+
 	if (mat.isContinuous()){
-   		array->insert(array->end(), mat.data, mat.data+(mat.rows*mat.cols*mat.channels()));
-   		//cout << (int)mat.data[0] << endl;
-
-   		//for(int i = 0 ; i < (mat.rows*mat.cols*mat.channels()) ; ++i){
-   		for(int i = 0 ; i < 20 ; ++i){
-   			array->push_back(static_cast<int> (mat.data[i]));
-   			cout << "This is mat.data: " << (int)mat.data[i] << endl;
+		finalVector.clear();
+   		for(int i = 0 ; i < (mat.rows*mat.cols*mat.channels()) ; ++i){
+   			//cout << "This is mat.data: " << (int)mat.data[i] << endl;
+   			finalVector.push_back(data_ptr[i]);
    		}
 	}
    	/*
@@ -164,6 +169,4 @@ void matrixToVector(const Mat& mat, vector<uint8_t>& finalVector){
    		    array->insert(array->end(), row, row+(mat.cols*mat.channels()));
    		}
    	*/
-
-   	finalVector = *array;
 }

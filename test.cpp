@@ -76,41 +76,46 @@ void testTransformation(int verbose = 0) {
 }
 
 void testMatrixToVector(int verbose = 0) {
-	Mat mat({21, 22, 23});
+	vector<int> expectedVectorVals = {21, 22, 23};
+	vector<int> vectorVals{255, 255, 255};
 
-	vector<uint8_t> vectorVals{255, 255, 255};
-	vector<uint8_t> expectedVectorVals = {21, 22, 23};
+	Mat mat(expectedVectorVals); //datatype of mat should be int
 
-	cout << "Before matrixToVector function" << endl;
-	cout << "=============================="<< endl;
-	cout << "vectorVals size is " << vectorVals.size() << endl;
-	cout << "expectedVectorVals size is " << expectedVectorVals.size() << endl << endl;
+	if (verbose) {
+		cout << "Before matrixToVector function" << endl;
+		cout << "=============================="<< endl;
+		cout << "vectorVals size is " << vectorVals.size() << endl;
+		cout << "expectedVectorVals size is " << expectedVectorVals.size() << endl << endl;
 
-	cout << "vectorVals contains ";
-	for (int i = 0; i < vectorVals.size(); i++) {
-		int value = vectorVals[i];
-		cout << value << ", ";
+
+		cout << "vectorVals contains ";
+		for (int i = 0; i < vectorVals.size(); i++) {
+			int value = vectorVals[i];
+			cout << value << ", ";
+		}
+		cout << endl << endl;
 	}
-	cout << endl << endl;
 
 	matrixToVector(mat, vectorVals);
 
-	cout << "After matrixToVector function" << endl;
-	cout << "============================="<< endl;
-	cout << "vectorVals size is " << vectorVals.size() << endl;
-	cout << "expectedVectorVals size is " << expectedVectorVals.size() << endl << endl;
+	if (verbose) {
+		cout << "After matrixToVector function" << endl;
+		cout << "============================="<< endl;
+		cout << "vectorVals size is " << vectorVals.size() << endl;
+		cout << "expectedVectorVals size is " << expectedVectorVals.size() << endl << endl;
 
-	cout << "vectorVals contains ";
-	for (int i = 0; i < vectorVals.size(); i++) {
-		int value = vectorVals[i];
-		cout << value << ", ";
+		cout << "vectorVals contains ";
+		for (int i = 0; i < vectorVals.size(); i++) {
+			int value = vectorVals[i];
+			cout << value << ", ";
+		}
+		cout << endl << endl;
 	}
-	cout << endl << endl;
 
 	//TODO: TEST FAILS AT THIS POINT
 	//assert (vectorVals.size() == expectedVectorVals.size());
 	for (int i = 0; i < vectorVals.size(); i++) {
-		assert (vectorVals[i] != expectedVectorVals[i]);
+		assert (vectorVals[i] == expectedVectorVals[i]);
 	}
 }
 
