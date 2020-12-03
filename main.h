@@ -147,13 +147,23 @@ void matrixToVector(const Mat& mat, vector<uint8_t>& finalVector){
 	vector<uint8_t>* array = new vector<uint8_t>(mat.rows*mat.cols*mat.channels());
 
 	cout << endl << "DEBUG: Printing out mat from within matrixToVector function " << mat << endl << endl;
-	if (mat.isContinuous())
+	if (mat.isContinuous()){
    		array->insert(array->end(), mat.data, mat.data+(mat.rows*mat.cols*mat.channels()));
+   		//cout << (int)mat.data[0] << endl;
+
+   		//for(int i = 0 ; i < (mat.rows*mat.cols*mat.channels()) ; ++i){
+   		for(int i = 0 ; i < 20 ; ++i){
+   			array->push_back(static_cast<int> (mat.data[i]));
+   			cout << "This is mat.data: " << (int)mat.data[i] << endl;
+   		}
+	}
+   	/*
    	else
    		for (int i=0; i<mat.rows; ++i){
    		    const uchar* row = mat.ptr<uchar>(i);
    		    array->insert(array->end(), row, row+(mat.cols*mat.channels()));
    		}
+   	*/
 
    	finalVector = *array;
 }
